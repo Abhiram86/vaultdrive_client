@@ -4,7 +4,6 @@ export default function PricingCard({
   period,
   features = [],
   cta = { label: "Choose", href: "#", primary: false },
-  highlight = false,
   ring = false,
 }: {
   name: string;

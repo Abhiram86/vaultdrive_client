@@ -9,7 +9,7 @@ export default function Sidebar({ open }: { open: boolean }) {
 
   return (
     <aside
-      className={`flex-shrink max-w-64 min-w-64 m-2 mr-0.5 ring-2 ring-neutral-800 rounded-lg flex-1 sticky top-0 bg-neutral-950 p-4 transition-all ${
+      className={`flex-shrink max-w-64 min-w-64 m-2 mr-[0.25px] ring-0 ring-neutral-800 rounded-lg flex-1 sticky top-0 bg-neutral-900 p-4 transition-all ${
         open ? "block" : "hidden"
       }`}
     >

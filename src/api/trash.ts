@@ -18,3 +18,16 @@ export const getTrashFilesApi = async () => {
     return { data: null, error: "Something went wrong" };
   }
 };
+
+export const restoreFileApi = async (id: string) => {
+  try {
+    const res = await trash.patch(`/${id}`);
+    return res.data as { data: { message: string }; error: null };
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AxiosError) {
+      return error.response?.data as { data: null; error: string };
+    }
+    return { data: null, error: "Something went wrong" };
+  }
+};

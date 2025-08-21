@@ -49,13 +49,13 @@ function Dashboard() {
   });
 
   return (
-    <div className="bg-neutral-900 relative h-full text-neutral-50 flex gap-0">
+    <div className="bg-neutral-950 relative h-full text-neutral-50 flex gap-0">
       {/* Sidebar */}
       <Sidebar open={sidebarOpen} />
 
       {/* Main */}
       <div
-        className={`min-w-md m-2 p-4 ring-2 ring-neutral-800 rounded-lg bg-neutral-950 flex flex-col overflow-hidden ${sidebarOpen ? "w-full" : "flex-1"}`}
+        className={`min-w-md m-2 p-4 ring-0 ring-neutral-800 rounded-lg bg-neutral-900 flex flex-col overflow-hidden ${sidebarOpen ? "w-full" : "flex-1"}`}
       >
         <header className="flex items-center p-2 border-b border-neutral-800 space-x-2">
           <button
@@ -69,7 +69,7 @@ function Dashboard() {
           <input
             type="text"
             placeholder="Search in Drive"
-            className="flex-1 rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2 text-sm text-neutral-200 focus:outline-none focus:ring-1 focus:ring-neutral-700"
+            className="flex-1 rounded-lg border border-neutral-700 bg-neutral-900 px-4 py-2 text-sm text-neutral-200 focus:outline-none focus:ring-1 focus:ring-neutral-700"
           />
           <div>
             <button

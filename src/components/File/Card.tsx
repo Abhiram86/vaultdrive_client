@@ -1,19 +1,19 @@
 import { useState } from "react";
-import Options from "../Modal/Options";
+import Options, { type Option } from "../Modal/Options";
 import type { MyFile } from "../Tabs/Drive";
 
 export default function Card({
   file,
-  onDelOrTrash,
+  options,
 }: {
   file: MyFile;
-  onDelOrTrash: (success: boolean) => void;
+  options: Option[];
 }) {
   const [open, setOpen] = useState(false);
   return (
     <tr
       key={file._id}
-      className="border-b relative border-neutral-800/50 hover:bg-neutral-900"
+      className="border-b relative border-neutral-800/50 hover:bg-neutral-800"
     >
       <td className="p-3 flex items-center gap-2">
         <span className="text-xl">
@@ -30,11 +30,21 @@ export default function Card({
       <td className="relative">
         <img
           onClick={() => setOpen((prev) => !prev)}
-          className="min-w-4 max-w-6 p-1 hover:bg-neutral-600 rounded-full cursor-pointer"
+          className="min-w-4 max-w-6 p-1 hover:bg-neutral-700 rounded-full cursor-pointer"
           src="/options.svg"
           alt="options"
         />
-        {open && <Options onDelOrTrash={onDelOrTrash} id={file._id} />}
+        {open && (
+          <Options
+            options={options.map((o) => ({
+              ...o,
+              onClick: () => {
+                o.onClick();
+                setOpen(false);
+              },
+            }))}
+          />
+        )}
       </td>
     </tr>
   );

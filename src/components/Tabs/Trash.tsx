@@ -1,6 +1,10 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getTrashFilesApi } from "@/api/trash";
+import { getTrashFilesApi, restoreFileApi } from "@/api/trash";
 import Table from "../File/Table";
+import type { MyFile } from "./Drive";
+import type { Option } from "../Modal/Options";
+import { deleteFileApi } from "@/api/upload";
+import toast from "react-hot-toast";
 
 export default function Trash() {
   const { data, isPending, isError } = useQuery({
@@ -13,14 +17,40 @@ export default function Trash() {
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;
-  if (data.error || !data.data) return <p>{data.error}</p>;
+  if (!data || data.error || !data.data) return <p>{data?.error || "No files found"}</p>;
+
+  const getOptions = (file: MyFile): Option[] => [
+    {
+      name: "Restore",
+      onClick: async () => {
+        const res = await restoreFileApi(file._id);
+        if (res.error) {
+          toast.error(res.error);
+        }
+        if (res.data) {
+          toast.success(res.data.message);
+          queryClient.invalidateQueries({ queryKey: ["trash"] });
+        }
+      },
+    },
+    {
+      name: "Delete Forever",
+      onClick: async () => {
+        const res = await deleteFileApi(file._id);
+        if (res.error) {
+          toast.error(res.error);
+        }
+        if (res.data) {
+          toast.success(res.data.message);
+          queryClient.invalidateQueries({ queryKey: ["trash"] });
+        }
+      },
+    },
+  ];
 
   return (
     <div className="h-[calc(100vh-12rem)]">
-      <Table
-        files={data.data}
-        handleSetFiles={(files) => queryClient.setQueryData(["trash"], files)}
-      />
+      <Table files={data.data} getOptions={getOptions} />
     </div>
   );
 }

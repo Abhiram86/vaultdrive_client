@@ -1,12 +1,13 @@
 import type { MyFile } from "../Tabs/Drive";
+import type { Option } from "../Modal/Options";
 import Card from "./Card";
 
 export default function Table({
   files,
-  handleSetFiles,
+  getOptions,
 }: {
   files: MyFile[];
-  handleSetFiles: (fileList: MyFile[]) => void;
+  getOptions: (file: MyFile) => Option[];
 }) {
   return (
     <table className="w-full text-left">
@@ -26,13 +27,7 @@ export default function Table({
           </tr>
         ) : (
           files.map((file) => (
-            <Card
-              key={file._id}
-              onDelOrTrash={(op) => {
-                if (op) handleSetFiles(files.filter((f) => f._id !== file._id));
-              }}
-              file={file}
-            />
+            <Card key={file._id} file={file} options={getOptions(file)} />
           ))
         )}
       </tbody>

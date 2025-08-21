@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import DropSection from "../DropSection";
-import { getFilesApi, uploadFileApi } from "@/api/upload";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { getFilesApi, moveToTrashApi, uploadFileApi } from "@/api/upload";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Table from "../File/Table";
+import type { Option } from "../Modal/Options";
+import { startFile } from "@/api/starred";
 
 export interface MyFile extends File {
   _id: string;
@@ -17,6 +19,8 @@ export default function Drive() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (data?.data && !data.error) setFiles(data.data);
   }, [data]);
@@ -26,6 +30,7 @@ export default function Drive() {
     onSuccess: (res) => {
       if (res.data) {
         toast.success(res.data.message);
+        queryClient.invalidateQueries({ queryKey: ["uploads"] });
       } else if (res.error) {
         toast.error(res.error);
       } else {
@@ -38,21 +43,47 @@ export default function Drive() {
     const formdata = new FormData();
     Array.from(fileList).forEach((file) => formdata.append("files", file));
     mutation.mutate(formdata);
-    setFiles((prev) => [
-      ...prev,
-      ...Array.from(fileList).map((file, i) =>
-        Object.assign(file, { _id: String(Date.now() + i) })
-      ),
-    ]);
   };
 
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
   if (data.error) return <div>Error</div>;
 
+  const getOptions = (file: MyFile): Option[] => [
+    {
+      name: "share",
+      onClick: () => {},
+    },
+    {
+      name: "star",
+      onClick: async () => {
+        const res = await startFile(file._id);
+        if (res.error) {
+          toast.error(res.error);
+        }
+        if (res.data) {
+          toast.success(res.data.message);
+        }
+      },
+    },
+    {
+      name: "move to trash",
+      onClick: async () => {
+        const res = await moveToTrashApi(file._id);
+        if (res.error) {
+          toast.error(res.error);
+        }
+        if (res.data) {
+          toast.success(res.data.message);
+          queryClient.invalidateQueries({ queryKey: ["uploads"] });
+        }
+      },
+    },
+  ];
+
   return (
     <DropSection onDropFiles={handleSetFiles}>
-      <Table files={files} handleSetFiles={(fileList) => setFiles(fileList)} />
+      <Table files={files} getOptions={getOptions} />
     </DropSection>
   );
 }
