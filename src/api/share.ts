@@ -22,3 +22,16 @@ export const shareFileApi = async (
   const res = await share.post(`/${fileId}`, { isPublic, allowedEmails });
   return res.data as { data: ShareLinkType; error: null | string };
 };
+
+export const getSharedFileApi = async (id: string) => {
+  const res = await share.get(`/${id}`);
+  return res.data as {
+    data: {
+      id: string;
+      fileName: string;
+      fileType: string;
+      previewFile: string;
+    };
+    error: null | string;
+  };
+};
