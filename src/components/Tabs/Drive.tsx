@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import Table from "../File/Table";
 import type { Option } from "../Modal/Options";
 import { startFile } from "@/api/starred";
+import ShareModal from "../Modal/ShareModal";
+import { shareFileApi } from "@/api/share";
 
 export interface MyFile extends File {
   _id: string;
@@ -13,6 +15,9 @@ export interface MyFile extends File {
 
 export default function Drive() {
   const [files, setFiles] = useState<MyFile[]>([]);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<MyFile | null>(null);
+
   const { data, isPending, isError } = useQuery({
     queryKey: ["uploads"],
     queryFn: getFilesApi,
@@ -45,6 +50,17 @@ export default function Drive() {
     mutation.mutate(formdata);
   };
 
+  const handleShare = async (isPublic: boolean, allowedEmails: string[]) => {
+    if (!selectedFile) return;
+    const res = await shareFileApi(selectedFile._id, isPublic, allowedEmails);
+    if (res.error) {
+      toast.error(res.error);
+    } else {
+      toast.success("File shared successfully");
+      setIsShareModalOpen(false);
+    }
+  };
+
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
   if (data.error) return <div>Error</div>;
@@ -52,7 +68,10 @@ export default function Drive() {
   const getOptions = (file: MyFile): Option[] => [
     {
       name: "share",
-      onClick: () => {},
+      onClick: () => {
+        setSelectedFile(file);
+        setIsShareModalOpen(true);
+      },
     },
     {
       name: "star",
@@ -82,8 +101,17 @@ export default function Drive() {
   ];
 
   return (
-    <DropSection onDropFiles={handleSetFiles}>
-      <Table files={files} getOptions={getOptions} />
-    </DropSection>
+    <>
+      <DropSection onDropFiles={handleSetFiles}>
+        <Table files={files} getOptions={getOptions} />
+      </DropSection>
+      {isShareModalOpen && selectedFile && (
+        <ShareModal
+          file={selectedFile}
+          onClose={() => setIsShareModalOpen(false)}
+          onShare={handleShare}
+        />
+      )}
+    </>
   );
 }

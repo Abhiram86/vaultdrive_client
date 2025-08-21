@@ -17,11 +17,12 @@ export default function Trash() {
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;
-  if (!data || data.error || !data.data) return <p>{data?.error || "No files found"}</p>;
+  if (!data || data.error || !data.data)
+    return <p>{data?.error || "No files found"}</p>;
 
   const getOptions = (file: MyFile): Option[] => [
     {
-      name: "Restore",
+      name: "restore",
       onClick: async () => {
         const res = await restoreFileApi(file._id);
         if (res.error) {
@@ -34,7 +35,7 @@ export default function Trash() {
       },
     },
     {
-      name: "Delete Forever",
+      name: "delete forever",
       onClick: async () => {
         const res = await deleteFileApi(file._id);
         if (res.error) {

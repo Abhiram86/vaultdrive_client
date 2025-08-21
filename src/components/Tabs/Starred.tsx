@@ -17,15 +17,16 @@ export default function Starred() {
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;
-  if (!data || data.error || !data.data) return <p>{data?.error || "No files found"}</p>;
+  if (!data || data.error || !data.data)
+    return <p>{data?.error || "No files found"}</p>;
 
   const getOptions = (file: MyFile): Option[] => [
     {
-      name: "Share",
+      name: "share",
       onClick: () => {},
     },
     {
-      name: "Unstar",
+      name: "unstar",
       onClick: async () => {
         const res = await unStarFile(file._id);
         if (res.error) {
@@ -38,7 +39,7 @@ export default function Starred() {
       },
     },
     {
-      name: "Move to trash",
+      name: "move to trash",
       onClick: async () => {
         const res = await moveToTrashApi(file._id);
         if (res.error) {
