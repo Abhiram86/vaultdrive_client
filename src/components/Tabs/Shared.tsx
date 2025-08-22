@@ -20,26 +20,44 @@ export default function Shared() {
   if (isError) return <div>Error</div>;
   if (data.error) return <div>{data.error}</div>;
 
-  const sentFiles: MyFile[] = data.data.shareLinks.map((link) => link.file);
+  const sentFiles = data.data.shareLinks.map((link) => ({
+    ...(link.file as MyFile),
+    jwt: link.jwt,
+  }));
   const receivedFiles: MyFile[] = data.data.userShares.map(
     (share) => share.file
   );
 
-  const getOptions = (file: MyFile): Option[] => {
-    return [
-      {
-        name: "revoke sharing",
-        onClick: async () => {
-          const res = await revokeShareLinkApi(file._id);
-          if (res.error) {
-            toast.error(res.error);
-          } else {
-            toast.success("Successfully revoked sharing");
-            queryClient.invalidateQueries({ queryKey: ["shared"] });
-          }
+  const getOptions = (file: MyFile & { jwt?: string }): Option[] => {
+    const options: Option[] = [];
+
+    if (file.jwt) {
+      options.push({
+        name: "copy url",
+        onClick: () => {
+          const url = `${window.location.origin}/file/${file.jwt}`;
+          navigator.clipboard.writeText(url).then(
+            () => toast.success("URL copied to clipboard!"),
+            () => toast.error("Failed to copy URL.")
+          );
         },
+      });
+    }
+
+    options.push({
+      name: "revoke sharing",
+      onClick: async () => {
+        const res = await revokeShareLinkApi(file._id);
+        if (res.error) {
+          toast.error(res.error);
+        } else {
+          toast.success("Successfully revoked sharing");
+          queryClient.invalidateQueries({ queryKey: ["shared"] });
+        }
       },
-    ];
+    });
+
+    return options;
   };
 
   return (

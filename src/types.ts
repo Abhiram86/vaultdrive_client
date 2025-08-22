@@ -12,6 +12,7 @@ export interface UserShareType {
 export interface ShareLinkType {
   _id: string;
   file: MyFile;
+  jwt: string;
   owner: string; // This is an ObjectId, but we'll treat it as a string
   isPublic: boolean;
   allowedEmails: string[];
