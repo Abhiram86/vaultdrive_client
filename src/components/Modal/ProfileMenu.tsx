@@ -1,7 +1,22 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import Modal from "./Modal";
+import { logout } from "@/api/auth";
+import toast from "react-hot-toast";
+import { useUserStore } from "@/store/User";
 
 export default function ProfileMenu({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+  const { clearUser } = useUserStore();
+  const handleLogout = async () => {
+    const res = await logout();
+    if (res?.message) {
+      toast.success(res.message);
+      router.navigate({ to: "/" });
+      clearUser();
+    } else {
+      toast.error("Something went wrong");
+    }
+  };
   return (
     <Modal
       childrenClassName="h-fit"
@@ -18,7 +33,10 @@ export default function ProfileMenu({ onClose }: { onClose: () => void }) {
             </Link>
           ))}
           <li className="w-full">
-            <button className="p-0.5 w-full text-start text-red-400 rounded-lg px-2 hover:bg-red-900 hover:text-red-200 transition-colors duration-75 cursor-pointer">
+            <button
+              onClick={handleLogout}
+              className="p-0.5 w-full text-start text-red-400 rounded-lg px-2 hover:bg-red-900 hover:text-red-200 transition-colors duration-75 cursor-pointer"
+            >
               Logout
             </button>
           </li>

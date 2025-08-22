@@ -84,3 +84,12 @@ export const authenticate = async (query?: Record<string, string>) => {
     }
   }
 };
+
+export const logout = async () => {
+  try {
+    const res = await auth.post("/logout");
+    return res.data as { message: string };
+  } catch (error) {
+    console.error(error);
+  }
+};

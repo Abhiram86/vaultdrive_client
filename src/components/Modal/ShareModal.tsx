@@ -33,7 +33,7 @@ export default function ShareModal({
 
   return (
     <Modal onClose={onClose} className="flex items-center justify-center">
-      <div className="bg-neutral-950/50 backdrop-blur-md ring-2 ring-neutral-800 rounded-lg p-6 w-full max-w-md">
+      <div className="bg-neutral-950/50 backdrop-blur-md ring-2 ring-neutral-800 rounded-lg p-6 max-w-md min-w-sm">
         <h2 className="text-xl font-bold mb-4">Share {file.name}</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
