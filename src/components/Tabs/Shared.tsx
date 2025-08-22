@@ -14,12 +14,11 @@ export default function Shared() {
   });
 
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = React.useState<"sent" | "received">("sent");
 
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
   if (data.error) return <div>{data.error}</div>;
-
-  const [activeTab, setActiveTab] = React.useState<"sent" | "received">("sent");
 
   const sentFiles: MyFile[] = data.data.shareLinks.map((link) => link.file);
   const receivedFiles: MyFile[] = data.data.userShares.map(

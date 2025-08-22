@@ -1,4 +1,4 @@
-import { MyFile } from "./components/Tabs/Drive";
+import { type MyFile } from "./components/Tabs/Drive";
 
 export interface UserShareType {
   _id: string;

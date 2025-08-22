@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getSharedFileApi } from "@/api/share";
+import ImageViewer from "@/components/preview/ImageViewer";
+import PdfViewer from "@/components/preview/PdfViewer";
+import VideoViewer from "@/components/preview/VideoViewer";
 
 export const Route = createFileRoute("/file/$id")({
   component: RouteComponent,
@@ -42,6 +45,23 @@ function RouteComponent() {
   const base64File = data.data.previewFile;
   const fileSrc = `data:${fileType};base64,${base64File}`;
 
+  const renderPreview = () => {
+    if (fileType.startsWith("image/")) {
+      return <ImageViewer fileSrc={fileSrc} fileName={data.data.fileName} />;
+    } else if (fileType === "application/pdf") {
+      return <PdfViewer fileSrc={fileSrc} />;
+    } else if (fileType.startsWith("video/")) {
+      return <VideoViewer fileSrc={fileSrc} fileType={fileType} />;
+    } else {
+      return (
+        <p>
+          Preview not available for this file type. Use the download button
+          above.
+        </p>
+      );
+    }
+  };
+
   return (
     <div className="bg-neutral-950 min-h-screen text-white">
       <header className="bg-neutral-900 p-4 flex justify-between items-center">
@@ -54,19 +74,8 @@ function RouteComponent() {
           Download
         </a>
       </header>
-      <main className="p-4 flex justify-center">
-        {fileType.startsWith("image/") ? (
-          <img
-            src={fileSrc}
-            alt={data.data.fileName}
-            className="max-w-full max-h-[80vh] rounded-lg"
-          />
-        ) : (
-          <p>
-            Preview not available for this file type. Use the download button
-            above.
-          </p>
-        )}
+      <main className="p-4 flex justify-center items-center">
+        {renderPreview()}
       </main>
     </div>
   );
