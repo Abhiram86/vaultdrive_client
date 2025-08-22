@@ -88,12 +88,13 @@ function App() {
               <div className="rounded-2xl border border-neutral-800 bg-neutral-900/60 p-3 shadow-2xl shadow-black/50 backdrop-blur">
                 <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-gradient-to-br from-neutral-900 to-neutral-800 ring-1 ring-inset ring-neutral-800 flex items-center justify-center text-neutral-500">
                   <div className="text-center">
-                    <div className="mx-auto mb-4 inline-grid size-14 place-items-center rounded-xl bg-neutral-200/15 text-neutral-200 ring-1 ring-neutral-200/20">
+                    {/* <div className="mx-auto mb-4 inline-grid size-14 place-items-center rounded-xl bg-neutral-200/15 text-neutral-200 ring-1 ring-neutral-200/20">
                       ▦
                     </div>
                     <p className="text-sm">
                       Screenshot of your file grid / folders goes here
-                    </p>
+                    </p> */}
+                    <img src="/hero.png" alt="hero" />
                   </div>
                 </div>
               </div>
