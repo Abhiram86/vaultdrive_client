@@ -19,7 +19,7 @@ export default function PdfViewer({ fileSrc }: PdfViewerProps) {
   return (
     <div className="max-w-full max-h-[80vh] overflow-y-auto">
       <Document file={fileSrc} onLoadSuccess={onDocumentLoadSuccess}>
-        {Array.from(new Array(numPages), (el, index) => (
+        {Array.from(new Array(numPages), (_el, index) => (
           <Page
             key={`page_${index + 1}`}
             pageNumber={index + 1}
