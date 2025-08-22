@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import type { ShareLinkType, UserShareType } from "@/types";
 
 const share = axios.create({
@@ -34,4 +34,17 @@ export const getSharedFileApi = async (id: string) => {
     };
     error: null | string;
   };
+};
+
+export const revokeShareLinkApi = async (id: string) => {
+  try {
+    const res = await share.delete(`/${id}`);
+    return res.data as { data: null; error: null | string };
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AxiosError) {
+      return { data: null, error: error.response?.data?.error };
+    }
+    return { data: null, error: "Something went wrong" };
+  }
 };
