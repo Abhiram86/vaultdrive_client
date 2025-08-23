@@ -1,9 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getTrashFilesApi, restoreFileApi } from "@/api/trash";
+import { deleteFileApi, getTrashFilesApi, restoreFileApi } from "@/api/trash";
 import Table from "../File/Table";
 import type { MyFile } from "./Drive";
 import type { Option } from "../Modal/Options";
-import { deleteFileApi } from "@/api/upload";
 import toast from "react-hot-toast";
 
 export default function Trash() {

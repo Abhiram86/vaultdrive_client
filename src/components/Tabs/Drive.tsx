@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DropSection from "../DropSection";
-import { getFilesApi, moveToTrashApi, uploadFileApi } from "@/api/upload";
+import { getFilesApi, uploadFileApi } from "@/api/upload";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Table from "../File/Table";
@@ -8,6 +8,7 @@ import type { Option } from "../Modal/Options";
 import { startFile } from "@/api/starred";
 import ShareModal from "../Modal/ShareModal";
 import { shareFileApi } from "@/api/share";
+import { moveToTrashApi } from "@/api/trash";
 
 export interface MyFile extends File {
   _id: string;

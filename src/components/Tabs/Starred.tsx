@@ -3,8 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Table from "../File/Table";
 import type { Option } from "../Modal/Options";
 import type { MyFile } from "./Drive";
-import { moveToTrashApi } from "@/api/upload";
 import toast from "react-hot-toast";
+import { moveToTrashApi } from "@/api/trash";
 
 export default function Starred() {
   const { data, isPending, isError } = useQuery({

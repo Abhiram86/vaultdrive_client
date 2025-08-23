@@ -19,9 +19,37 @@ export const getTrashFilesApi = async () => {
   }
 };
 
+export const moveToTrashApi = async (id: string) => {
+  try {
+    const res = await trash.post(`/${id}`);
+    return res.data as { data: { message: string }; error: null };
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AxiosError) {
+      return error.response?.data as { data: null; error: string };
+    } else {
+      return { data: null, error: "Something went wrong" };
+    }
+  }
+};
+
+export const deleteFileApi = async (id: string) => {
+  try {
+    const res = await trash.delete(`/${id}`);
+    return res.data as { data: { message: string }; error: null };
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AxiosError) {
+      return error.response?.data as { data: null; error: string };
+    } else {
+      return { data: null, error: "Something went wrong" };
+    }
+  }
+};
+
 export const restoreFileApi = async (id: string) => {
   try {
-    const res = await trash.patch(`/${id}`);
+    const res = await trash.post(`/restore/${id}`);
     return res.data as { data: { message: string }; error: null };
   } catch (error) {
     console.error(error);
